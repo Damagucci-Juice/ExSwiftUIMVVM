@@ -10,8 +10,15 @@ import Combine
 
 final class CounterViewModel: ViewModelType {
     // MARK: - Types
-    enum State {
-        case count(Int)
+    struct State {
+        var count: Int
+        var alertItem: AlertItem? // `nil`이면 Alert 없음
+    }
+
+    struct AlertItem: Identifiable {
+        let id = UUID()
+        let title: String
+        let message: String
     }
 
     enum Action {
@@ -25,21 +32,27 @@ final class CounterViewModel: ViewModelType {
 
     // MARK: - Initializer
     init() {
-        state = .count(0)
+        state = State(count: 0, alertItem: nil)
     }
 
     // MARK: - Action
     func action(_ action: Action) {
         switch action {
         case .onTapAddButton:
-            state = .count(getCurrnetCount() + 1)
+            state.count += 1
         case .onTapSubtractButton:
-            state = .count(getCurrnetCount() - 1)
+            if state.count - 1 < 0 {
+                state.alertItem = AlertItem(
+                    title: "에러",
+                    message: "카운트는 0 이하 일 수 없습니다."
+                )
+            } else {
+                state.count -= 1
+            }
         }
     }
 
-    private func getCurrnetCount() -> Int {
-        guard case let .count(int) = state else { return 0 }
-        return int
+    func dismissAlert() {
+        state.alertItem = nil
     }
 }

@@ -11,15 +11,21 @@ struct CounterView: View {
     @ObservedObject var viewModel: CounterViewModel
 
     var body: some View {
-        switch viewModel.state {
-        case .count(let number):
-            VStack(spacing: 20) {
-                numberView(number)
-                HStack(spacing: 50) {
-                    subtractButton()
-                    addButton()
-                }
+        VStack(spacing: 20) {
+            numberView(viewModel.state.count)
+            HStack(spacing: 50) {
+                subtractButton()
+                addButton()
             }
+        }
+        .alert(item: $viewModel.state.alertItem) { alertItem in
+            Alert(
+                title: Text(alertItem.title),
+                message: Text(alertItem.message),
+                dismissButton: .default(Text("OK")) {
+                    viewModel.dismissAlert()
+                }
+            )
         }
     }
 
