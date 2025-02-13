@@ -24,6 +24,7 @@ final class CounterViewModel: ViewModelType {
     enum Action {
         case onTapAddButton
         case onTapSubtractButton
+        case onAlertDismiss
     }
 
     // MARK: - Properties
@@ -49,10 +50,8 @@ final class CounterViewModel: ViewModelType {
             } else {
                 state.count -= 1
             }
+        case .onAlertDismiss:
+            state.alertItem = nil
         }
-    }
-
-    func dismissAlert() {
-        state.alertItem = nil
     }
 }

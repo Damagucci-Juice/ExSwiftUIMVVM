@@ -23,7 +23,7 @@ struct CounterView: View {
                 title: Text(alertItem.title),
                 message: Text(alertItem.message),
                 dismissButton: .default(Text("OK")) {
-                    viewModel.dismissAlert()
+                    viewModel.action(.onAlertDismiss)
                 }
             )
         }
